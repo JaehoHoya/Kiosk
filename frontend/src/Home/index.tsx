@@ -7,7 +7,8 @@ import { GetCategoryResponseDto } from '../Apis/Response/Category';
 import { getCategoryRequest } from '../Apis';
 import { ResponseDto } from '../Apis/Response';
 import Cart from '../Cart';
-import Payment from '../Pay';
+
+
 
 
 
@@ -53,7 +54,7 @@ export default function Home() {
 
   useEffect(()=>{
 
-    
+
     getCategoryRequest().then(getCategoryResponse)
     
     },[])
@@ -64,7 +65,7 @@ export default function Home() {
     
        <MenuItem products={productData} />
        <Cart/>
-       <Payment/>
+       
     </div>
   );
 }

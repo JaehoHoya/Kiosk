@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import styles from './style.module.css';
 import CategoryButton from './CategoryButton';
-import useSpeechToText from '../Speech';
+
 
 interface CategoryNavbarProps {
   categories: { categoryId: number; categoryName: string }[];
@@ -12,7 +12,7 @@ interface CategoryNavbarProps {
 }
 
 const CategoryNavbar: React.FC<CategoryNavbarProps> = ({ categories, handleCategoryClick, activeCategoryId }) => {
-  const { transcript, listening, toggleListening,resetTranscript } = useSpeechToText();
+
 
   useEffect(() => {
     // categories 배열이 비어있지 않은 경우에만 첫 번째 카테고리의 상품을 표시
@@ -22,22 +22,15 @@ const CategoryNavbar: React.FC<CategoryNavbarProps> = ({ categories, handleCateg
   }, [categories]); 
 
   useEffect(() => {
-    const words = transcript.split(' '); // 음성 입력을 공백을 기준으로 단어로 분리
-    const matchingCategory = categories.find(category => words.includes(category.categoryName));
-    if (matchingCategory) {
-      handleCategoryClick(matchingCategory.categoryId);
-      resetTranscript(); // 일치하는 카테고리 버튼이 눌렸을 때 음성값 초기화
-    } 
-  }, [transcript, categories, handleCategoryClick]);
+     // 음성 입력을 공백을 기준으로 단어로 분리
+   
+  }, [categories, handleCategoryClick]);
 
   return (
     <>
       <div className={styles.CategoryWrapper}>
-        <div className={styles.CategoryTitle}>하는중</div>
-        <textarea className="transcript" value={transcript} onChange={() => {}} />
-        <button onClick={toggleListening}>
-          {listening ? '음성인식 중지' : '음성인식 시작'}
-        </button>
+        <div className={styles.CategoryTitle}>키오스크</div>
+        
       </div>
       <div className={styles.categoryNavbar}>
         {categories.map(category => (

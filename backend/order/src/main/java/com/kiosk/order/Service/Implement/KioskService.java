@@ -6,22 +6,28 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.kiosk.order.Dto.Request.PostCategoryRequestDto;
+import com.kiosk.order.Dto.Request.PostOrderProductRequestDto;
 import com.kiosk.order.Dto.Response.GetCategoryResponseDto;
-import com.kiosk.order.Dto.Response.PostCategoryResponseDto;
 import com.kiosk.order.Dto.Response.ResponseDto;
 import com.kiosk.order.Entity.CategoryEntity;
+import com.kiosk.order.Entity.OrderProductEntity;
+import com.kiosk.order.Entity.OrdersEntity;
 import com.kiosk.order.Repository.CategoryRepository;
+import com.kiosk.order.Repository.OrderProductRepository;
+import com.kiosk.order.Repository.OrdersRepository;
+import com.kiosk.order.Repository.ProductRepository;
 import com.kiosk.order.Service.CategoryService;
+import com.kiosk.order.Service.OrderProductService;
 
 import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
-public class KioskService implements CategoryService{
+public class KioskService implements CategoryService,OrderProductService{
     
-
+    private final OrdersRepository ordersRepository;
     private final CategoryRepository categoryRepository;
-    
+    private final ProductRepository productRepository;
+    private final OrderProductRepository orderProductRepository;
 
     
     List<CategoryEntity> categoryEntities= new ArrayList<>();
@@ -41,21 +47,27 @@ public class KioskService implements CategoryService{
     }
 
     @Override
-    public ResponseEntity<? super PostCategoryResponseDto> postCategory(PostCategoryRequestDto dto) {
-        try {
+    public ResponseEntity postOrderProduct(List<PostOrderProductRequestDto> dtoList) {
+       try {
+            OrdersEntity order = new OrdersEntity();
+            OrdersEntity savedOrder = ordersRepository.save(order);
+        
+            for (PostOrderProductRequestDto dto : dtoList) {
+                OrderProductEntity orderProductEntity = new OrderProductEntity(dto);
+                orderProductEntity.setOrder(savedOrder);
+                orderProductRepository.save(orderProductEntity);
+            }
             
-            CategoryEntity categoryEntity =new CategoryEntity(dto);
-            categoryRepository.save(categoryEntity);
+        
+       } catch (Exception exception) {
+        exception.printStackTrace();
+       
+       }
 
+      return null;
 
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            return ResponseDto.databaseError();
-        }
-        return PostCategoryResponseDto.sucess();
     }
 
-    
 
     }
 

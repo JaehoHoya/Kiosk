@@ -1,7 +1,7 @@
-
 import styles from './style.module.css'
 import MenuOption from './MenuOption';
 import { useState } from 'react';
+import Cart from '../Cart';
 
 
 interface Product {
@@ -20,34 +20,33 @@ interface ProductsProps {
   products: Product[];
 }
 
+export default function MenuItem({ products }: ProductsProps) {
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-export default function MenuItem({products}:ProductsProps){
+  const handleProductClick = (productId: number) => {
+    const clickedProduct = products.find(product => product.productId === productId);
+    if (clickedProduct) {
+      setSelectedProduct(clickedProduct);
+    }
+  };
 
-//state: 메뉴 옵션 보기 상태
-const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-const handleProductClick = (productId: number) => {
-  const clickedProduct = products.find(product => product.productId === productId);
-  if (clickedProduct) {
-    setSelectedProduct(clickedProduct);
-  }
-};
+  const handleCloseMenuOption = () => {
+    setSelectedProduct(null);
+  };
 
-//event handler: 메뉴 옵션 상자보기 클릭 이벤트 처리 
-
-    return(
-        <>
-        <div className={styles.menuContainer} >
-         
-        { products.map((item,key)=>(
-        <div className={styles.menuItem}key={key} onClick={() => handleProductClick(item.productId)} >
-          <img src={item.productImage} alt={item.productName} />
-      <span>{item.productName}</span>
-      <span>{`${item.productPrice}원`}</span>
+  return (
+    <>
+      <div className={styles.menuContainer}>
+        {products.map((item, key) => (
+          <div className={styles.menuItem} key={key} onClick={() => handleProductClick(item.productId)}>
+            <img src={item.productImage} alt={item.productName} />
+            <span>{item.productName}</span>
+            <span>{`${item.productPrice}원`}</span>
+          </div>
+        ))}
+        {selectedProduct && <MenuOption product={selectedProduct} onClose={handleCloseMenuOption} />}
       </div>
-       ))}
-       <MenuOption product={selectedProduct} />
-       </div>
       
-        </>
-    );
+    </>
+  );
 }

@@ -1,12 +1,8 @@
 package com.kiosk.order.Entity;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.kiosk.order.Dto.Request.PostCategoryRequestDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,17 +31,5 @@ public class CategoryEntity {
 
  
 
-    
-    public CategoryEntity(PostCategoryRequestDto dto){
-
-        Date now =Date.from(Instant.now());
-        SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        String categoryDatetime=simpleDateFormat.format(now);
-        
-        this.categoryName=dto.getCategoryName();
-        this.categoryDatetime=categoryDatetime;
-        
-    }
 
 }
