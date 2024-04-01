@@ -23,8 +23,7 @@ public class CategoryEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) // 식별키 값을 자동 생성 관리 자동증가
     private int categoryId;
     private String categoryName;
-    private String categoryDatetime;
-
+   
     @JsonManagedReference
     @OneToMany(mappedBy = "category")
     private List<ProductEntity> products;

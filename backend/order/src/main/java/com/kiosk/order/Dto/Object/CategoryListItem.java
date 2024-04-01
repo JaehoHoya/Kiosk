@@ -19,14 +19,12 @@ public class CategoryListItem {
     
     private int categoryId;
     private String categoryName;
-    private String categoryDatetime;
     private List<ProductEntity> products;
     
 
 public CategoryListItem(CategoryEntity categoryEntity){
     this.categoryId=categoryEntity.getCategoryId();
     this.categoryName=categoryEntity.getCategoryName();
-    this.categoryDatetime=categoryEntity.getCategoryDatetime();
     this.products = categoryEntity.getProducts();
 }
 

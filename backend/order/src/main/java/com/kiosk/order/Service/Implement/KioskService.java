@@ -49,16 +49,21 @@ public class KioskService implements CategoryService,OrderProductService{
     @Override
     public ResponseEntity postOrderProduct(List<PostOrderProductRequestDto> dtoList) {
        try {
+            
+            int totalOrderPrice = 0; 
+            // 오더아이디 생성 및 저장 
             OrdersEntity order = new OrdersEntity();
             OrdersEntity savedOrder = ordersRepository.save(order);
-        
+
             for (PostOrderProductRequestDto dto : dtoList) {
+                totalOrderPrice += dto.getOrderProductPrice();
                 OrderProductEntity orderProductEntity = new OrderProductEntity(dto);
                 orderProductEntity.setOrder(savedOrder);
                 orderProductRepository.save(orderProductEntity);
             }
-            
-        
+            // 토탈 가격 저장 
+            savedOrder.setTotalPrice(totalOrderPrice);
+            ordersRepository.save(savedOrder);
        } catch (Exception exception) {
         exception.printStackTrace();
        

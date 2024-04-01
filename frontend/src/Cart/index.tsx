@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import useCartStore from '../store/cart.store';
 import './style.css';
 import Payment from '../Pay';
-import Order from '../Types/Interface/Order.Interface';
-
-import axios from 'axios';
 
 
 function Cart() {
@@ -126,7 +123,7 @@ const calculateTotalPrice = () => {
       {payOpen&&(
       <Payment 
       handleClosePaymentModal={closePaymentModal}
-      cartlist={cartList}
+      
       totalPrice={calculateTotalPrice()} 
       />
       )}

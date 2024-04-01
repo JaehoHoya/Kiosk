@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import './style.css';
 import useCartStore from '../store/cart.store';
-const Payment = ({ handleClosePaymentModal,cartlist,totalPrice}) => {
-
+const Payment = ({ handleClosePaymentModal,totalPrice}) => {
+ 
   const { cartList } = useCartStore();
   const POST = async () => {
+    const method = 'kakao';
     const orderList = cartList.map(item => ({
       productId: item.productId,
       productName: item.productName,
@@ -14,12 +15,11 @@ const Payment = ({ handleClosePaymentModal,cartlist,totalPrice}) => {
       orderProductAmount: item.productAmount,
       orderProductPrice: item.newProductPrice
     }));
-    
+    console.log(orderList)
     try {
-      await postCartRequest(orderList);
+      await postCartRequest(orderList,method);
     } catch (error) {
       console.error('Error in POST:', error);
-      // 에러 처리 로직 추가
     }
   };
   const DOMAIN ='http://localhost:8080';
@@ -34,6 +34,10 @@ const API_DOMAIN =`${DOMAIN}/api/v1`;
       throw error; // 에러를 다시 throw하여 호출하는 측에서 처리할 수 있도록 합니다.
     }
   }
+const test=()=>{
+  POST();
+  console.log("aaaaa")
+} 
 const resetCart=()=>{
   useCartStore.setState({ cartList: [] });
 }
@@ -52,9 +56,11 @@ const resetCart=()=>{
 
   const requestPay = () => {
     const { IMP } = window;
-    console.log("IMP 값: ", IMP);
     IMP.init('imp38808434');
-    const products = cartlist.map(item => `${item.productName} x ${item.productAmount}개 ${item.newProductPrice}원`).join('\n ');
+    // api 문자열 제한 땜에 2개까지만 나오고 나머지는 외?개로 표시
+    const remainingCount = cartList.length - 2;
+    const displayedProducts = cartList.slice(0, 2).map(item => `${item.productName} x ${item.productAmount}개 ${item.newProductPrice}원`).join('\\n');
+    const products = remainingCount > 0 ? `${displayedProducts} 외 ${remainingCount}개` : displayedProducts;
     IMP.request_pay({
       pg: 'kakaopay.TC0ONETIME',
       pay_method: 'card',
@@ -121,8 +127,9 @@ const resetCart=()=>{
   };
   return (
     <>
+
     <div className='pay'>
-    
+    <div onClick={test}>테스트 버튼</div>
     <div className='payment-option' onClick={requestPay}>
       <img src='https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcEaPmw%2FbtrcIUODymI%2FEBvA7nx7wVTcdLIrgiVsJK%2Fimg.jpg' alt='카카오 로고'/>
       <div>카카오페이</div>
